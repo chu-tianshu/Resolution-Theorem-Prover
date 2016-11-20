@@ -13,12 +13,12 @@ public class TheoremProver {
 		System.out.println("Number of clauses: " + clauses.size());
 		for (int i = 0; i < clauses.size(); i++) printClause(clauses.get(i));
 		System.out.println("------------分割线------------");
+		System.out.println();
 		
 		System.out.println("Resolution starts here:");
 		
 		int i = 0;
 		int j = GOAL_CLAUSE_START_INDEX;
-		
 		while (true) {
 			if (j >= clauses.size()) {
 				System.out.println("Cannot be proved.");
@@ -33,7 +33,15 @@ public class TheoremProver {
 			
 			Clause ci = clauses.get(i);
 			Clause cj = clauses.get(j);
+			
+			System.out.println("The " + i + "th clause: ");
+			printClause(ci);
+			System.out.println("The " + j + "th clause: ");
+			printClause(cj);
+			
 			Clause resoResult = resolution(ci, cj);
+			System.out.println("Resolution result");
+			printClause(resoResult);
 			
 			if (resoResult.getPosLits().size() == 0 && resoResult.getNegLits().size() == 0) {
 				System.out.println("Proved from clauses: " + i + ", " + j);
@@ -45,50 +53,6 @@ public class TheoremProver {
 			
 			i++;
 		}
-		
-		/*
-		int i = 0;
-		while (true) {
-			if (i >= clauses.size() - 1) break;
-			
-			Clause c1 = clauses.get(i);
-			
-			boolean resultFound = false;
-			
-			int j = i + 1;
-			while (true) {
-				System.out.println("i = " + i);
-				System.out.println("j = " + j);
-				System.out.println("Clause set size: " + clauses.size());
-				
-				if (j >= clauses.size()) break;
-				
-				System.out.println("The ith clause: ");
-				printClause(clauses.get(i));
-				System.out.println("The jth clause: ");
-				printClause(clauses.get(j));
-				
-				Clause c2 = clauses.get(j);
-				
-				Clause resoResult = resolution(c1, c2);
-				
-				if (resoResult.getPosLits().size() == 0 && resoResult.getNegLits().size() == 0) {
-					System.out.println("Result found: " + i + ", " + j);
-					resultFound = true;
-					break;
-				}
-				
-				if ((!hasRepeat(resoResult)) && (resoResult.getPosSize() < c1.getPosSize() + c2.getPosSize() || resoResult.getNegSize() < c1.getNegSize() + c2.getNegSize()))
-					clauses.add(resoResult);
-				
-				j++;
-			}
-			
-			if (resultFound) break;
-			
-			i++;
-		}
-		*/
 	}
 
 	public static void printClause(Clause c) {
@@ -142,9 +106,17 @@ public class TheoremProver {
 				} else {
 					System.out.println("Unify");
 					
-					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++)
-						if (!l1.arguments.get(litIdx).equals(l2.arguments.get(litIdx)))
-							return(resolution(Clause.unify(c1, l1.arguments.get(litIdx), l2.arguments.get(litIdx)), c2));
+					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++) {
+						String arg1 = l1.arguments.get(litIdx);
+						String arg2 = l2.arguments.get(litIdx);
+						
+						if (!arg1.equals(arg2)) {
+							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
+							if (Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
+							if (Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
+							return resolution(Clause.unify(c1, arg1, arg2), c2);
+						}
+					}
 				}
 			}
 		}
@@ -169,9 +141,17 @@ public class TheoremProver {
 				} else {
 					System.out.println("Unify");
 					
-					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++)
-						if (!l1.arguments.get(litIdx).equals(l2.arguments.get(litIdx)))
-							return(resolution(Clause.unify(c1, l1.arguments.get(litIdx), l2.arguments.get(litIdx)), c2));
+					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++) {
+						String arg1 = l1.arguments.get(litIdx);
+						String arg2 = l2.arguments.get(litIdx);
+						
+						if (!arg1.equals(arg2)) {
+							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
+							if (Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
+							if (Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
+							return resolution(Clause.unify(c1, arg1, arg2), c2);
+						}
+					}
 				}
 			}
 		}
@@ -208,6 +188,6 @@ public class TheoremProver {
 	
 	private static List<Clause> clauses;
 	
-	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems1";
-	private static final int GOAL_CLAUSE_START_INDEX = 5;
+	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems4";
+	private static final int GOAL_CLAUSE_START_INDEX = 6;
 }

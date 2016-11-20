@@ -1,0 +1,7 @@
+((Grandparent x y)) ((Parent x z) (Parent z y))
+((Parent x y)) ((Motner x y))
+((Parent x y)) ((Father x y))
+((Father Zeus Ares)) ()
+((Mother Hera Ares)) ()
+((Father Ares Harmonia)) ()
+() ((Grandparent x Harmonia))

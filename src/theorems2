@@ -1,0 +1,8 @@
+((rr A)) ((coyote y))
+((chase z A)) ((coyote z))
+((smart x)) ((rr x) (beep x))
+() ((coyote w) (rr u) (catch w u) (smart u))
+((frustrated s) (catch s t)) ((coyote s) (rr t) (chase s t))
+((beep r)) ((rr r))
+((coyote B)) ()
+() ((frustrated B))
