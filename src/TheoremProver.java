@@ -14,7 +14,6 @@ public class TheoremProver {
 		
 		System.out.println("Number of clauses: " + clauses.size());
 		for (int i = 0; i < clauses.size(); i++) printClause(clauses.get(i));
-		System.out.println("------------分割线------------");
 		System.out.println();
 		
 		System.out.println("Resolution starts here:");
@@ -58,8 +57,13 @@ public class TheoremProver {
 				break;
 			}
 			
-			if ((!hasRepeat(resoResult)) && (resoResult.getPosSize() + resoResult.getNegSize() < ci.getPosSize() + cj.getPosSize() + ci.getNegSize() + cj.getNegSize()))
+			if ((!hasRepeat(resoResult)) && (resoResult.getPosSize() + resoResult.getNegSize() < Math.max(ci.getPosSize() + ci.getNegSize(), cj.getPosSize() + cj.getNegSize()))) {
 				clauses.add(resoResult);
+				
+				System.out.println("New clause added:");
+				printClause(resoResult);
+				System.out.println("Resolved from " + i + " and " + j);
+			}
 			
 			i++;
 		}
@@ -108,8 +112,6 @@ public class TheoremProver {
 				
 				if (!l1.funcName.equals(l2.funcName)) continue;
 				if (Literal.isSame(l1.arguments, l2.arguments)) {
-					System.out.println("此处应该有掌声。");
-					
 					mergedPosIndices1.add(i);
 					mergedNegIndices2.add(j);
 					break;
@@ -143,8 +145,6 @@ public class TheoremProver {
 				
 				if (!l1.funcName.equals(l2.funcName)) continue;
 				if (Literal.isSame(l1.arguments, l2.arguments)) {
-					System.out.println("此处应该有掌声。");
-					
 					mergedNegIndices1.add(i);
 					mergedPosIndices2.add(j);
 					break;
@@ -198,6 +198,6 @@ public class TheoremProver {
 	
 	private static List<Clause> clauses;
 	
-	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems4";
-	private static final int GOAL_CLAUSE_START_INDEX = 6;
+	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems1";
+	private static final int GOAL_CLAUSE_START_INDEX = 5;
 }
