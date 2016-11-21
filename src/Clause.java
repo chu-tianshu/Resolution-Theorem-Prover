@@ -33,8 +33,11 @@ public class Clause {
 		
 		for (int i = 0; i < c1.getPosSize(); i++)
 			if (!c1.getPosLits().get(i).funcName.equals(c2.getPosLits().get(i).funcName)
-			 || !Literal.isSame(c1.getPosLits().get(i).arguments, c2.getPosLits().get(i).arguments)
-			 || !c1.getNegLits().get(i).funcName.equals(c2.getNegLits().get(i).funcName)
+			 || !Literal.isSame(c1.getPosLits().get(i).arguments, c2.getPosLits().get(i).arguments))
+				return false;
+		
+		for (int i = 0; i < c1.getNegSize(); i++)
+			if (!c1.getNegLits().get(i).funcName.equals(c2.getNegLits().get(i).funcName)
 			 || !Literal.isSame(c1.getNegLits().get(i).arguments, c2.getNegLits().get(i).arguments))
 				return false;
 			

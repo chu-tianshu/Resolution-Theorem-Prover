@@ -106,9 +106,9 @@ public class TheoremProver {
 				} else {
 					System.out.println("Unify");
 					
-					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++) {
-						String arg1 = l1.arguments.get(litIdx);
-						String arg2 = l2.arguments.get(litIdx);
+					for (int argIdx = 0; argIdx < l1.arguments.size(); argIdx++) {
+						String arg1 = l1.arguments.get(argIdx);
+						String arg2 = l2.arguments.get(argIdx);
 						
 						if (!arg1.equals(arg2)) {
 							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
@@ -141,9 +141,9 @@ public class TheoremProver {
 				} else {
 					System.out.println("Unify");
 					
-					for (int litIdx = 0; litIdx < l1.arguments.size(); litIdx++) {
-						String arg1 = l1.arguments.get(litIdx);
-						String arg2 = l2.arguments.get(litIdx);
+					for (int argIdx = 0; argIdx < l1.arguments.size(); argIdx++) {
+						String arg1 = l1.arguments.get(argIdx);
+						String arg2 = l2.arguments.get(argIdx);
 						
 						if (!arg1.equals(arg2)) {
 							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
