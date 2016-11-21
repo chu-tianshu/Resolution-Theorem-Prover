@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +18,14 @@ public class TheoremProver {
 		System.out.println();
 		
 		System.out.println("Resolution starts here:");
+		
+		List<Clause> former = new ArrayList<Clause>(clauses.subList(0, GOAL_CLAUSE_START_INDEX));
+		List<Clause> latter = new ArrayList<Clause>(clauses.subList(GOAL_CLAUSE_START_INDEX, clauses.size()));
+		Collections.sort(former, new Comparator<Clause>() {
+			public int compare(Clause c1, Clause c2) {
+				return ((c1.getPosSize() + c1.getNegSize()) - (c2.getPosSize() + c2.getNegSize()));
+			}
+		});
 		
 		int i = 0;
 		int j = GOAL_CLAUSE_START_INDEX;
@@ -112,9 +122,9 @@ public class TheoremProver {
 						
 						if (!arg1.equals(arg2)) {
 							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
-							if (Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
-							if (Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
-							return resolution(Clause.unify(c1, arg1, arg2), c2);
+							if (Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
+							if (Character.isLowerCase(arg2.charAt(0)) && !Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
+							return Clause.unify(c1, arg1, arg2);
 						}
 					}
 				}
@@ -147,9 +157,9 @@ public class TheoremProver {
 						
 						if (!arg1.equals(arg2)) {
 							if (!Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) continue;
-							if (Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
-							if (Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
-							return resolution(Clause.unify(c1, arg1, arg2), c2);
+							if (Character.isLowerCase(arg1.charAt(0)) && !Character.isLowerCase(arg2.charAt(0))) return(resolution(Clause.unify(c1, arg1, arg2), c2));
+							if (Character.isLowerCase(arg2.charAt(0)) && !Character.isLowerCase(arg1.charAt(0))) return(resolution(Clause.unify(c2, arg2, arg1), c1));
+							return Clause.unify(c1, arg1, arg2);
 						}
 					}
 				}
