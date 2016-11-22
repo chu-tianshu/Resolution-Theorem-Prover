@@ -13,6 +13,16 @@ public class Literal {
 		for (int i = 1; i < arr.length; i++) this.arguments.add(arr[i]);
 	}
 	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(funcName);
+		sb.append("(");
+		for (String arg : arguments) sb.append(arg + " ");
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(")");
+		return sb.toString();
+	}
+	
 	public static boolean isSame(List<String> args1, List<String> args2) {
 		if (args1.size() != args2.size()) return false;
 

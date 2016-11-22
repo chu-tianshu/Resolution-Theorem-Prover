@@ -28,6 +28,16 @@ public class Clause {
 		return this.negLits;
 	}
 	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (Literal posLit : posLits) sb.append(posLit.toString());
+		sb.append(") (");
+		for (Literal negLit : negLits) sb.append(negLit.toString());
+		sb.append(")");
+		return sb.toString();
+	}
+	
 	public static boolean isSame(Clause c1, Clause c2) {
 		if (c1.getPosSize() != c2.getPosSize() || c1.getNegSize() != c2.getNegSize()) return false;
 		

@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class TheoremProver {
 	public static void main(String[] args) throws FileNotFoundException {
+		printResults = new ArrayList<>();
+		
 		File testCase = new File(FILE_PATH);
 		clauses = ClauseParser.parse(testCase);
 		
@@ -16,15 +18,31 @@ public class TheoremProver {
 		for (int i = 0; i < clauses.size(); i++) printClause(clauses.get(i));
 		System.out.println();
 		
+		if (IS_UNIT_PREFERENCE) {
+			List<Clause> former = new ArrayList<Clause>(clauses.subList(0, GOAL_CLAUSE_START_INDEX));
+			List<Clause> latter = new ArrayList<Clause>(clauses.subList(GOAL_CLAUSE_START_INDEX, clauses.size()));
+			Collections.sort(former, new Comparator<Clause>() {
+				public int compare(Clause c1, Clause c2) {
+					return ((c1.getPosSize() + c1.getNegSize()) - (c2.getPosSize() + c2.getNegSize()));
+				}
+			});
+			
+			clauses.clear();
+			clauses.addAll(former);
+			clauses.addAll(latter);
+		}
+		
 		System.out.println("Resolution starts here:");
 		
-		List<Clause> former = new ArrayList<Clause>(clauses.subList(0, GOAL_CLAUSE_START_INDEX));
-		List<Clause> latter = new ArrayList<Clause>(clauses.subList(GOAL_CLAUSE_START_INDEX, clauses.size()));
-		Collections.sort(former, new Comparator<Clause>() {
-			public int compare(Clause c1, Clause c2) {
-				return ((c1.getPosSize() + c1.getNegSize()) - (c2.getPosSize() + c2.getNegSize()));
-			}
-		});
+		resolutionStepCount = 0;
+		
+		int clauseNumber = 1;
+		for (clauseNumber = 1; clauseNumber <= clauses.size(); clauseNumber++) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("(" + clauseNumber + ") ");
+			sb.append(clauses.get(clauseNumber - 1).toString());
+			printResults.add(sb.toString());
+		}
 		
 		int i = 0;
 		int j = GOAL_CLAUSE_START_INDEX;
@@ -52,13 +70,27 @@ public class TheoremProver {
 			System.out.println("Resolution result");
 			printClause(resoResult);
 			
+			resolutionStepCount++;
+			
 			if (resoResult.getPosLits().size() == 0 && resoResult.getNegLits().size() == 0) {
 				System.out.println("Proved from clauses: " + i + ", " + j);
+				System.out.println("Proved in " + resolutionStepCount + " steps");
+				
+				for (String toPrint : printResults) System.out.println(toPrint);
+				
 				break;
 			}
 			
-			if ((!hasRepeat(resoResult)) && (resoResult.getPosSize() + resoResult.getNegSize() < Math.max(ci.getPosSize() + ci.getNegSize(), cj.getPosSize() + cj.getNegSize()))) {
+			if ((!hasRepeat(resoResult)) 
+			 && (resoResult.getPosSize() + resoResult.getNegSize() < (IS_UNIT_PREFERENCE ? Math.max(ci.getPosSize() + ci.getNegSize(), cj.getPosSize() + cj.getNegSize()) : ci.getPosSize() + ci.getNegSize() + cj.getPosSize() + cj.getNegSize())))
+			{
 				clauses.add(resoResult);
+				clauseNumber++;
+				StringBuilder sb = new StringBuilder();
+				sb.append("(" + (clauseNumber - 1) + ") ");
+				sb.append(resoResult.toString());
+				sb.append(" Parents: " + i + ", " + j);
+				printResults.add(sb.toString());
 				
 				System.out.println("New clause added:");
 				printClause(resoResult);
@@ -197,7 +229,10 @@ public class TheoremProver {
 	}
 	
 	private static List<Clause> clauses;
+	private static List<String> printResults;
+	private static int resolutionStepCount;
 	
-	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems1";
-	private static final int GOAL_CLAUSE_START_INDEX = 5;
+	private static final String FILE_PATH = "/Users/tianshuchu/Documents/Study/ArtificialIntelligence/Program/prog2/TheoremProver/src/theorems4";
+	private static final int GOAL_CLAUSE_START_INDEX = 6;
+	private static final boolean IS_UNIT_PREFERENCE = true;
 }
