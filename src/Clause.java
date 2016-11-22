@@ -55,9 +55,6 @@ public class Clause {
 	}
 	
 	public static Clause unify(Clause c, String oldArg, String newArg) {
-		System.out.println("oldArg: " + oldArg);
-		System.out.println("newArg: " + newArg);
-		
 		List<Literal> pos = new ArrayList<>();
 		List<Literal> neg = new ArrayList<>();
 		
@@ -82,8 +79,6 @@ public class Clause {
 		}
 		
 		Clause unified = new Clause(pos, neg);
-		
-		TheoremProver.printClause(unified);
 		
 		return unified;
 	}

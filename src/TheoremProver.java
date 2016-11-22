@@ -14,10 +14,6 @@ public class TheoremProver {
 		File testCase = new File(FILE_PATH);
 		clauses = ClauseParser.parse(testCase);
 		
-		System.out.println("Number of clauses: " + clauses.size());
-		for (int i = 0; i < clauses.size(); i++) printClause(clauses.get(i));
-		System.out.println();
-		
 		if (IS_UNIT_PREFERENCE) {
 			List<Clause> former = new ArrayList<Clause>(clauses.subList(0, GOAL_CLAUSE_START_INDEX));
 			List<Clause> latter = new ArrayList<Clause>(clauses.subList(GOAL_CLAUSE_START_INDEX, clauses.size()));
@@ -60,23 +56,13 @@ public class TheoremProver {
 			
 			Clause ci = clauses.get(i);
 			Clause cj = clauses.get(j);
-			
-			System.out.println("The " + i + "th clause: ");
-			printClause(ci);
-			System.out.println("The " + j + "th clause: ");
-			printClause(cj);
-			
 			Clause resoResult = resolution(ci, cj);
-			System.out.println("Resolution result");
-			printClause(resoResult);
 			
 			resolutionStepCount++;
 			
 			if (resoResult.getPosLits().size() == 0 && resoResult.getNegLits().size() == 0) {
 				System.out.println("Proved from clauses: " + i + ", " + j);
 				System.out.println("Proved in " + resolutionStepCount + " steps");
-				
-				for (String toPrint : printResults) System.out.println(toPrint);
 				
 				break;
 			}
@@ -91,36 +77,13 @@ public class TheoremProver {
 				sb.append(resoResult.toString());
 				sb.append(" Parents: " + i + ", " + j);
 				printResults.add(sb.toString());
-				
-				System.out.println("New clause added:");
-				printClause(resoResult);
-				System.out.println("Resolved from " + i + " and " + j);
 			}
 			
 			i++;
 		}
-	}
-
-	public static void printClause(Clause c) {
-		System.out.println("Clause");
 		
-		System.out.println("Positive literals: ");
-		for (Literal lit : c.getPosLits()) {
-			System.out.println("Function name: " + lit.funcName);
-			System.out.print("Arguments: ");
-			for (String arg : lit.arguments) System.out.print(arg + ", ");
-			System.out.println();
-		}
-		
-		System.out.println("Negative literals: ");
-		for (Literal lit : c.getNegLits()) {
-			System.out.println("Function name: " + lit.funcName);
-			System.out.print("Arguments: ");
-			for (String arg : lit.arguments) System.out.print(arg + ",");
-			System.out.println();
-		}
-		
-		System.out.println("");
+		System.out.println("Final clause set:");
+		for (String toPrint : printResults) System.out.println(toPrint);
 	}
 	
 	private static Clause resolution(Clause c1, Clause c2) {
@@ -148,8 +111,6 @@ public class TheoremProver {
 					mergedNegIndices2.add(j);
 					break;
 				} else {
-					System.out.println("Unify");
-					
 					for (int argIdx = 0; argIdx < l1.arguments.size(); argIdx++) {
 						String arg1 = l1.arguments.get(argIdx);
 						String arg2 = l2.arguments.get(argIdx);
@@ -181,8 +142,6 @@ public class TheoremProver {
 					mergedPosIndices2.add(j);
 					break;
 				} else {
-					System.out.println("Unify");
-					
 					for (int argIdx = 0; argIdx < l1.arguments.size(); argIdx++) {
 						String arg1 = l1.arguments.get(argIdx);
 						String arg2 = l2.arguments.get(argIdx);
